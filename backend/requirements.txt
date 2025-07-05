@@ -7,4 +7,4 @@ requests==2.32.3
 python-dotenv==1.0.1
 gunicorn==20.1.0
 langdetect==1.0.9
-numpy<2 --only-binary=all
+numpy<2
