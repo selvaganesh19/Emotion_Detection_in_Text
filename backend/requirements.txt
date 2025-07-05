@@ -1,6 +1,6 @@
 Flask==2.3.2
 Flask-Cors==3.0.10
-torchtorch --index-url https://download.pytorch.org/whl/cpu 
+torch --index-url https://download.pytorch.org/whl/cpu 
 transformers 
 deep-translator==1.11.4
 requests==2.32.3
