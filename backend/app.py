@@ -66,4 +66,4 @@ def serve_manifest():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 7071))  # Use the PORT environment variable provided by Render
-    app.run(debug=True, host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port)
