@@ -1,0 +1,10 @@
+Flask==2.3.2
+Flask-Cors==3.0.10
+torch==2.2.1
+transformers==4.43.3
+deep-translator==1.11.4
+requests==2.32.3
+python-dotenv==1.0.1
+gunicorn==20.1.0
+langdetect==1.0.9
+numpy<2
