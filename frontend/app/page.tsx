@@ -16,7 +16,7 @@ export default function SentimentAnalyzer() {
     setHasResult(false)
 
     try {
-      const response = await fetch("http://127.0.0.1:7071/analyze", {
+      const response = await fetch("https://mobilepwa.onrender.com/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
