@@ -24,6 +24,18 @@ Understanding emotions in textual data is critical for applications like sentime
 
 ---
 
+## INTERFACE AND OUTPUT 
+
+## OUTPUT 1
+<img width="1919" height="1022" alt="image" src="https://github.com/user-attachments/assets/1399d8d8-5c89-4b44-bd23-92657849419d" />
+
+---
+
+## OUTPUT 2
+<img width="1919" height="1019" alt="image" src="https://github.com/user-attachments/assets/3ad39084-3ae4-4e68-adb8-ce56d3e1cd2a" />
+
+---
+
 ## 🛠️ Installation
 
 ### 1. Clone the Repository
@@ -113,7 +125,7 @@ frontend/
 **Made with ❤️ by the Emotion_Detection_in_Text Team**
 
 ## License
-This project is licensed under the **MIT** License.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 🔗 GitHub Repo: https://github.com/selvaganesh19/Emotion_Detection_in_Text
