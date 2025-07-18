@@ -61,39 +61,35 @@ Edit
 
 ### 1. Clone the Repo
 
-```bash
 git clone https://github.com/selvaganesh19/Emotion_Detection_in_Text.git
 cd Emotion_Detection_in_Text
+---
 2. Install Dependencies
-bash
-Copy
-Edit
 pip install -r requirements.txt
-3. Run the Emotion Detector
-bash
-Copy
-Edit
+---
+4. Run the Emotion Detector
 python main.py
+---
 🧑‍🏫 Example
-python
-Copy
-Edit
+
 Input: "I'm so happy with the results!"
+
 Output: Emotion - Joy 😄
 📊 Results
+
 Accuracy: 87%+ on test data
-
+---
 Models tested: Logistic Regression, Multinomial NB, Linear SVM
-
+---
 Best performance: SVM with TF-IDF features
-
+---
 💡 Future Enhancements
 Add Deep Learning models (LSTM, BERT)
-
+---
 Deploy with Flask or Streamlit
-
+---
 Real-time Twitter Emotion Monitoring 🌐🐦
-
+---
 🙌 Contributing
 Feel free to fork this repo, raise issues or submit pull requests!
 Let’s build emotion-aware AI together. ❤️
