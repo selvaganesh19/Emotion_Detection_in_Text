@@ -1,5 +1,3 @@
-# Emotion_Detection_in_Text
-
 # Emotion_Detection_in_Text 😃😢😡
 
 Emotion_Detection_in_Text is a modern web application that leverages state-of-the-art Natural Language Processing (NLP) techniques to detect emotions in text. Featuring a Python Flask backend and a React/Next.js frontend, it provides a seamless, multi-platform experience for analyzing text emotions in various languages, complete with an intuitive user interface and Progressive Web App (PWA) support.
