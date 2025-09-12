@@ -1,20 +1,16 @@
-from flask import Flask, request, jsonify, render_template, send_from_directory
-from flask_cors import CORS
+
+import gradio as gr
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from deep_translator import GoogleTranslator
 from langdetect import detect
 import torch
-import os
 
-app = Flask(__name__)
-CORS(app)
-
-# Load the model and tokenizer
+# Load model & tokenizer
 MODEL_NAME = "cardiffnlp/twitter-roberta-base-sentiment"
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
 
-# Emotion labels based on model output
+# Sentiment labels
 emotion_labels = {
     0: "Negative 😕",
     1: "Neutral 😐",
@@ -22,23 +18,16 @@ emotion_labels = {
 }
 
 # Translator
-translator = GoogleTranslator(source='auto', target='en')
+translator = GoogleTranslator(source="auto", target="en")
 
-# @app.route('/')
-# def index():
-#     return render_template('index.html')
-
-@app.route('/analyze', methods=['POST'])
-def analyze_sentiment():
-    data = request.get_json()
-    user_input = data.get('text', '')
-
+def analyze_sentiment(user_input):
+    # Detect language
     detected_language = detect(user_input)
-    if detected_language != 'en':
-        translated_text = translator.translate(user_input)
-    else:
-        translated_text = user_input
-
+    
+    # Translate if not English
+    translated_text = translator.translate(user_input) if detected_language != "en" else user_input
+    
+    # Tokenize
     inputs = tokenizer(translated_text, return_tensors="pt", truncation=True, padding=True, max_length=512)
 
     with torch.no_grad():
@@ -46,24 +35,19 @@ def analyze_sentiment():
 
     logits = outputs.logits
     predicted_class = torch.argmax(logits, dim=-1).item()
-
     emotion = emotion_labels.get(predicted_class, "Unknown")
 
-    return jsonify({
-        "original_text": user_input,
-        "translated_text": translated_text,
-        "detected_language": detected_language,
-        "predicted_sentiment": emotion
-    })
+    # Return only predicted sentiment
+    return emotion
 
-@app.route('/static/<path:path>')
-def send_static(path):
-    return send_from_directory('static', path)
+# Build Gradio UI
+iface = gr.Interface(
+    fn=analyze_sentiment,
+    inputs=gr.Textbox(lines=3, placeholder="Enter text in any language..."),
+    outputs=gr.Label(label="Predicted Sentiment"),
+    title="🌍 Multilingual Sentiment Analysis",
+    description="Enter text in any language. The system will auto-detect, translate to English, and predict sentiment (Positive/Neutral/Negative)."
+)
 
-@app.route('/manifest.json')
-def serve_manifest():
-    return send_from_directory('.', 'manifest.json')
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 7071))  # Use the PORT environment variable provided by Render
-    app.run(host='0.0.0.0', port=port)
+if __name__ == "__main__":
+    iface.launch()
