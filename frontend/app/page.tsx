@@ -2,58 +2,76 @@
 
 import { useState } from "react"
 import { Brain, Sparkles, TrendingUp, TrendingDown, Minus } from "lucide-react"
+import { Client } from "@gradio/client"
+
+// Define response type for better type safety
+type SentimentResponse = { label: string; confidences: any }[]
+type SentimentResult = "Negative 😕" | "Neutral 😐" | "Positive 🙂" | "Error analyzing sentiment" | null
 
 export default function SentimentAnalyzer() {
   const [inputText, setInputText] = useState("")
-  const [result, setResult] = useState("")
+  const [result, setResult] = useState<SentimentResult>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [hasResult, setHasResult] = useState(false)
 
   const handleAnalyze = async () => {
     if (!inputText.trim()) return
-
     setIsLoading(true)
     setHasResult(false)
 
     try {
-      const response = await fetch("https://mobilepwa.onrender.com/analyze", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ text: inputText }),
+      // Connect to Gradio client
+      console.log("🔹 Connecting to client...")
+      const client = await Client.connect("selva1909/Emotion-Detection-in-Text")
+      
+      // Make prediction request
+      console.log("🔹 Sending request:", inputText.trim())
+      const response = await client.predict("/predict", {
+        user_input: inputText.trim()
       })
 
-      const data = await response.json()
-      setResult(data.predicted_sentiment)
-      setIsLoading(false)
-      setHasResult(true)
+      console.log("🔹 Raw response:", response)
+
+      // Extract sentiment from response
+      const data = response.data as SentimentResponse
+      const predicted = data[0]?.label
+
+      if (predicted) {
+        console.log("✅ Predicted sentiment:", predicted)
+        setResult(predicted as SentimentResult)
+        setHasResult(true)
+      } else {
+        console.warn("⚠️ Invalid response:", data)
+        setResult("Error analyzing sentiment")
+        setHasResult(true)
+      }
     } catch (error) {
-      console.error("Error analyzing sentiment:", error)
+      console.error("❌ Error:", error)
       setResult("Error analyzing sentiment")
-      setIsLoading(false)
       setHasResult(true)
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  const getSentimentIcon = (sentiment: string) => {
-    const lower = sentiment.toLowerCase()
-    if (lower.includes("positive")) return <TrendingUp className="w-8 h-8" />
-    if (lower.includes("negative")) return <TrendingDown className="w-8 h-8" />
+  const getSentimentIcon = (sentiment: SentimentResult) => {
+    if (!sentiment) return <Minus className="w-8 h-8" />
+    if (sentiment.includes("Positive")) return <TrendingUp className="w-8 h-8" />
+    if (sentiment.includes("Negative")) return <TrendingDown className="w-8 h-8" />
     return <Minus className="w-8 h-8" />
   }
 
-  const getSentimentColor = (sentiment: string) => {
-    const lower = sentiment.toLowerCase()
-    if (lower.includes("positive")) return "text-green-500"
-    if (lower.includes("negative")) return "text-red-500"
+  const getSentimentColor = (sentiment: SentimentResult) => {
+    if (!sentiment) return "text-yellow-500"
+    if (sentiment.includes("Positive")) return "text-green-500"
+    if (sentiment.includes("Negative")) return "text-red-500"
     return "text-yellow-500"
   }
 
-  const getSentimentBg = (sentiment: string) => {
-    const lower = sentiment.toLowerCase()
-    if (lower.includes("positive")) return "from-green-500/20 to-emerald-500/20"
-    if (lower.includes("negative")) return "from-red-500/20 to-rose-500/20"
+  const getSentimentBg = (sentiment: SentimentResult) => {
+    if (!sentiment) return "from-yellow-500/20 to-amber-500/20"
+    if (sentiment.includes("Positive")) return "from-green-500/20 to-emerald-500/20"
+    if (sentiment.includes("Negative")) return "from-red-500/20 to-rose-500/20"
     return "from-yellow-500/20 to-amber-500/20"
   }
 
@@ -84,7 +102,7 @@ export default function SentimentAnalyzer() {
               id="inputText"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder="Type or paste your text here... The more text you provide, the more accurate the analysis will be."
+              placeholder="Type or paste your text here..."
               className="w-full h-32 px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 resize-none hover:bg-white/10"
               disabled={isLoading}
             />
@@ -117,21 +135,7 @@ export default function SentimentAnalyzer() {
 
           {/* Results Section */}
           <div className="mt-8">
-            {isLoading && (
-              <div className="text-center py-8 animate-in fade-in duration-300">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full mb-4">
-                  <div className="w-8 h-8 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
-                </div>
-                <p className="text-slate-300 animate-pulse">Processing your text...</p>
-                <div className="mt-4 flex justify-center space-x-1">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" />
-                  <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce delay-100" />
-                  <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce delay-200" />
-                </div>
-              </div>
-            )}
-
-            {hasResult && !isLoading && (
+            {hasResult && !isLoading && result && (
               <div
                 className={`bg-gradient-to-r ${getSentimentBg(result)} rounded-xl p-6 border border-white/10 transform transition-all duration-500 animate-in slide-in-from-bottom-4 hover:scale-[1.02]`}
               >
@@ -155,7 +159,7 @@ export default function SentimentAnalyzer() {
                     onClick={() => {
                       setInputText("")
                       setHasResult(false)
-                      setResult("")
+                      setResult(null)
                     }}
                     className="w-full text-slate-300 hover:text-white transition-colors duration-200 text-sm"
                   >
