@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@gradio/client": "^1.18.0"
+  }
+}
