@@ -103,55 +103,175 @@ class EmotionApp {
                 user_input: text 
             });
             
-            let emotion = 'neutral';
-            let confidence = 0.8;
+            console.log('Raw API Response:', result.data);
             
-            if (result.data && result.data[0]) {
+            let emotion = 'neutral';
+            let confidence = 0.0;
+            
+            if (result.data && result.data.length > 0) {
                 const prediction = result.data[0];
-                emotion = this.parseEmotion(prediction);
+                console.log('Prediction:', prediction);
                 
-                // Extract confidence if available
-                if (typeof prediction === 'object' && prediction.confidence) {
-                    confidence = prediction.confidence;
+                // Handle different response formats
+                if (typeof prediction === 'string') {
+                    emotion = this.parseEmotion(prediction);
+                    confidence = 0.85; // Default confidence for string responses
+                } else if (typeof prediction === 'object') {
+                    // If it's an object with emotion data
+                    if (prediction.label) {
+                        emotion = this.parseEmotion(prediction.label);
+                        confidence = prediction.score || prediction.confidence || 0.8;
+                    } else if (prediction.emotion) {
+                        emotion = this.parseEmotion(prediction.emotion);
+                        confidence = prediction.confidence || 0.8;
+                    } else {
+                        // If it's an array of predictions, take the highest confidence
+                        const topPrediction = this.getTopPrediction(prediction);
+                        emotion = topPrediction.emotion;
+                        confidence = topPrediction.confidence;
+                    }
+                } else if (Array.isArray(prediction)) {
+                    // If prediction is an array of emotion scores
+                    const topPrediction = this.getTopPrediction(prediction);
+                    emotion = topPrediction.emotion;
+                    confidence = topPrediction.confidence;
                 }
             }
             
             return {
                 emotion: emotion,
                 confidence: confidence,
-                source: 'AI Model'
+                source: 'AI Model',
+                rawResponse: result.data
             };
         } catch (error) {
+            console.error('Gradio API Error:', error);
             throw new Error('AI analysis failed: ' + error.message);
         }
+    }
+
+    getTopPrediction(predictions) {
+        // Handle array of predictions or object with emotion scores
+        let maxScore = 0;
+        let topEmotion = 'neutral';
+        
+        if (Array.isArray(predictions)) {
+            predictions.forEach(pred => {
+                if (pred.score > maxScore) {
+                    maxScore = pred.score;
+                    topEmotion = pred.label || pred.emotion;
+                }
+            });
+        } else if (typeof predictions === 'object') {
+            Object.entries(predictions).forEach(([emotion, score]) => {
+                if (score > maxScore) {
+                    maxScore = score;
+                    topEmotion = emotion;
+                }
+            });
+        }
+        
+        return {
+            emotion: this.parseEmotion(topEmotion),
+            confidence: maxScore
+        };
     }
 
     parseEmotion(emotionString) {
         if (!emotionString) return 'neutral';
         
-        const emotion = emotionString.toString().toLowerCase();
+        const emotion = emotionString.toString().toLowerCase().trim();
         
-        if (emotion.includes('joy') || emotion.includes('happy') || emotion.includes('positive')) {
-            return 'happy';
-        } else if (emotion.includes('sad') || emotion.includes('sadness')) {
-            return 'sad';
-        } else if (emotion.includes('anger') || emotion.includes('angry')) {
-            return 'angry';
-        } else if (emotion.includes('fear') || emotion.includes('afraid')) {
-            return 'fear';
-        } else if (emotion.includes('surprise') || emotion.includes('surprised')) {
-            return 'surprise';
-        } else if (emotion.includes('love')) {
-            return 'happy';
-        } else if (emotion.includes('disgust')) {
-            return 'angry';
-        } else {
-            return 'neutral';
+        // Enhanced emotion mapping for common emotion detection models
+        const emotionMappings = {
+            // Positive emotions
+            'joy': 'happy',
+            'happiness': 'happy',
+            'happy': 'happy',
+            'positive': 'happy',
+            'optimism': 'happy',
+            'love': 'happy',
+            'excitement': 'happy',
+            'enthusiasm': 'happy',
+            'gratitude': 'happy',
+            'satisfaction': 'happy',
+            'delight': 'happy',
+            'pleasure': 'happy',
+            
+            // Negative emotions
+            'sadness': 'sad',
+            'sad': 'sad',
+            'sorrow': 'sad',
+            'grief': 'sad',
+            'melancholy': 'sad',
+            'depression': 'sad',
+            'disappointment': 'sad',
+            'despair': 'sad',
+            'loneliness': 'sad',
+            'negative': 'sad',
+            
+            // Anger emotions
+            'anger': 'angry',
+            'angry': 'angry',
+            'rage': 'angry',
+            'fury': 'angry',
+            'irritation': 'angry',
+            'annoyance': 'angry',
+            'frustration': 'angry',
+            'hostility': 'angry',
+            'resentment': 'angry',
+            'disgust': 'angry',
+            'contempt': 'angry',
+            'hate': 'angry',
+            
+            // Fear emotions
+            'fear': 'fear',
+            'afraid': 'fear',
+            'anxiety': 'fear',
+            'worry': 'fear',
+            'panic': 'fear',
+            'terror': 'fear',
+            'dread': 'fear',
+            'nervousness': 'fear',
+            'apprehension': 'fear',
+            'concern': 'fear',
+            
+            // Surprise emotions
+            'surprise': 'surprise',
+            'surprised': 'surprise',
+            'amazement': 'surprise',
+            'astonishment': 'surprise',
+            'wonder': 'surprise',
+            'shock': 'surprise',
+            'bewilderment': 'surprise',
+            
+            // Neutral
+            'neutral': 'neutral',
+            'calm': 'neutral',
+            'peaceful': 'neutral',
+            'indifferent': 'neutral'
+        };
+        
+        // Direct mapping first
+        if (emotionMappings[emotion]) {
+            return emotionMappings[emotion];
         }
+        
+        // Partial matching for compound emotions or variations
+        for (const [key, value] of Object.entries(emotionMappings)) {
+            if (emotion.includes(key) || key.includes(emotion)) {
+                return value;
+            }
+        }
+        
+        // If no match found, return neutral
+        return 'neutral';
     }
 
     displayResults(result) {
-        const { emotion, confidence, source } = result;
+        const { emotion, confidence, source, rawResponse } = result;
+        
+        console.log('Displaying results:', { emotion, confidence, source });
         
         const emotionIcons = {
             happy: '😊',
@@ -162,7 +282,16 @@ class EmotionApp {
             neutral: '😐'
         };
 
-        this.emotionResult.textContent = this.capitalize(emotion);
+        const emotionLabels = {
+            happy: 'Happy/Positive',
+            sad: 'Sad/Negative',
+            angry: 'Angry',
+            fear: 'Fear/Anxiety',
+            surprise: 'Surprise',
+            neutral: 'Neutral'
+        };
+
+        this.emotionResult.textContent = emotionLabels[emotion] || this.capitalize(emotion);
         this.emotionResult.className = `emotion-result emotion-${emotion}`;
         
         const confidencePercent = Math.round(confidence * 100);
