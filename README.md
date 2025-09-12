@@ -1,77 +1,81 @@
-# Emotion_Detection_in_Text 😃😢😡
+# Emotion_Detection_in_Text
 
-Emotion_Detection_in_Text is a modern web application that leverages state-of-the-art Natural Language Processing (NLP) techniques to detect emotions in text. Featuring a Python Flask backend and a React/Next.js frontend, it provides a seamless, multi-platform experience for analyzing text emotions in various languages, complete with an intuitive user interface and Progressive Web App (PWA) support.
+# Emotion_Detection_in_Text 😃📄
+
+Emotion_Detection_in_Text is an intelligent system for detecting emotions in textual data. It leverages machine learning and natural language processing to analyze input text and identify underlying emotions, making it useful for applications in sentiment analysis, chatbot development, social media monitoring, and more.
 
 ---
 
 ## 🚀 Introduction
 
-Understanding emotions in textual data is critical for applications like sentiment analysis, customer feedback, and mental health support. **Emotion_Detection_in_Text** automatically identifies emotions expressed in user-provided text, making it a valuable tool for developers, researchers, and businesses.
+This project provides a full-stack solution for emotion detection from text, combining a Python backend powered by state-of-the-art NLP models (via Hugging Face Transformers) and an interactive frontend with PWA (Progressive Web App) capabilities. It supports multilingual inputs and offers a seamless user experience for both desktop and mobile platforms.
 
 ---
 
 ## ✨ Features
 
-- **Multi-language Support**: Detects emotions in texts written in various languages using translation and language detection tools.
-- **Modern NLP Backbone**: Utilizes transformer-based models for accurate emotion classification.
-- **Responsive UI**: Built with React/Next.js for a smooth user experience.
-- **PWA Ready**: Installable as a Progressive Web App for offline and mobile-friendly usage.
-- **Dark/Light Theme**: Easily switch between themes for optimal comfort.
-- **Reusable UI Components**: Includes a suite of customizable and accessible UI elements.
-- **CORS Enabled API**: Seamless integration between frontend and backend.
-
----
-
-## 📱 INTERFACE AND OUTPUT 
-
-## ➡️ OUTPUT 1
-<img width="1919" height="1022" alt="image" src="https://github.com/user-attachments/assets/1399d8d8-5c89-4b44-bd23-92657849419d" />
-
----
-
-## ➡️ OUTPUT 2
-<img width="1919" height="1019" alt="image" src="https://github.com/user-attachments/assets/3ad39084-3ae4-4e68-adb8-ce56d3e1cd2a" />
+- **State-of-the-art NLP Model:** Uses pre-trained models for accurate emotion and sentiment detection.
+- **Multilingual Support:** Automatically detects language and translates text for analysis.
+- **Gradio Interface:** Interactive backend powered by Gradio for easy API integration.
+- **PWA Frontend:** Installable web app with offline support via service workers.
+- **Modern UI:** Responsive design for desktop and mobile devices.
 
 ---
 
 ## 🛠️ Installation
 
-### 1. Clone the Repository
+### Prerequisites
 
-```bash
-git clone https://github.com/your-username/Emotion_Detection_in_Text.git
-cd Emotion_Detection_in_Text
-```
+- Python 3.8+
+- Node.js & npm (for frontend builds)
 
-### 2. Backend Setup (Python/Flask)
+### Backend Setup
 
-```bash
-cd backend
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-# If requirements.txt not provided:
-pip install flask flask-cors transformers torch deep-translator langdetect
-python app.py
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/Emotion_Detection_in_Text.git
+   cd Emotion_Detection_in_Text/backend
+   ```
 
-### 3. Frontend Setup (React/Next.js)
+2. **Install Python dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-```bash
-cd ../frontend
-npm install
-npm run dev
-```
+3. **Run the backend**
+   ```bash
+   python app.py
+   ```
+
+### Frontend Setup
+
+1. **Navigate to frontend folder**
+   ```bash
+   cd ../frontend
+   ```
+
+2. **Install dependencies & run**
+   ```bash
+   npm install
+   npm start
+   ```
 
 ---
 
-## 📈 Usage
+## 📋 Usage
 
-1. **Run the backend** on [http://localhost:5000](http://localhost:5000).
-2. **Run the frontend** on [http://localhost:3000](http://localhost:3000).
-3. Enter any text (in any supported language) in the web interface.
-4. Click "Analyze" to view detected emotions.
-5. Install the app on your device for PWA features!
+1. **Start the backend server**:
+   - The Gradio interface will be available at `http://localhost:7860`.
+
+2. **Access the frontend**:
+   - Open `http://localhost:3000` in your browser.
+
+3. **Enter text**:
+   - Type or paste any text into the input box.
+   - The system will automatically detect the language, translate if necessary, and display the detected emotion.
+
+4. **Install as PWA**:
+   - On supported browsers, you can install the app to your device for offline usage.
 
 ---
 
@@ -79,13 +83,13 @@ npm run dev
 
 Contributions are welcome! To get started:
 
-1. [Fork the repository](https://github.com/your-username/Emotion_Detection_in_Text/fork)
-2. Create a new branch: `git checkout -b feature/your-feature`
-3. Commit your changes: `git commit -m 'Add some feature'`
-4. Push to the branch: `git push origin feature/your-feature`
-5. Open a Pull Request
+1. Fork the repository.
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
+4. Push to the branch (`git push origin feature/AmazingFeature`).
+5. Open a pull request.
 
-Please review our [CONTRIBUTING.md](CONTRIBUTING.md) if available.
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 
 ---
 
@@ -95,35 +99,22 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-> **Connect, analyze, and understand emotions in text with Emotion_Detection_in_Text!**
+> **Maintained by [Your Name or Organization]**  
+> For issues, suggestions, or questions, please open an [issue](https://github.com/yourusername/Emotion_Detection_in_Text/issues).
 
 ---
 
-## 📁 Project Structure
-
-```text
-backend/
-  └── app.py                # Flask backend API for emotion detection
-frontend/
-  └── components/
-      ├── PWAInstaller.tsx        # PWA installation prompt
-      ├── theme-provider.tsx      # Theme provider for dark/light mode
-      └── ui/
-          ├── accordion.tsx
-          ├── alert-dialog.tsx
-          ├── alert.tsx
-          ├── aspect-ratio.tsx
-          ├── avatar.tsx
-          ├── badge.tsx
-          └── breadcrumb.tsx
-```
+**Files included:**
+- `backend/app.py` — Gradio-powered Python backend for emotion detection
+- `frontend/script.js` — Main frontend logic with Gradio client and PWA support
+- `frontend/sw.js` — Service worker for offline caching
 
 ---
 
-**Made with ❤️ by the Emotion_Detection_in_Text Team**
+Happy Text Mining! 🎉
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT** License.
 
 ---
 🔗 GitHub Repo: https://github.com/selvaganesh19/Emotion_Detection_in_Text
