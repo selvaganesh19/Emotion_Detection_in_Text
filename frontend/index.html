@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Detection PWA</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Emotion Detection">
+    
+    <!-- Icons -->
+    <link rel="icon" href="icons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" href="icons/favicon-16x16.png" sizes="16x16">
+    <link rel="apple-touch-icon" href="icons/apple-icon-180x180.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <h1 class="logo">🎭 AI Emotion Detection</h1>
+                <button id="installBtn" class="install-btn hidden">📱 Install</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="container">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>AI Emotion Analysis</h2>
+                        <p>Analyze emotions in text using advanced AI technology</p>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label for="textInput">Enter your text:</label>
+                            <textarea 
+                                id="textInput" 
+                                placeholder="Type your text here to analyze emotions..."
+                                rows="4"
+                                maxlength="500"
+                            ></textarea>
+                            <div class="char-count">
+                                <span id="charCount">0</span>/500 characters
+                            </div>
+                        </div>
+                        
+                        <button id="analyzeBtn" class="btn btn-primary" disabled>
+                            <span id="btnText">🔍 Analyze Emotion</span>
+                            <div id="loadingSpinner" class="spinner hidden"></div>
+                        </button>
+                        
+                        <!-- Results -->
+                        <div id="results" class="results hidden">
+                            <h3>📊 Analysis Results</h3>
+                            <div class="result-card">
+                                <div id="emotionIcon" class="emotion-icon">🤔</div>
+                                <div id="emotionResult" class="emotion-result">-</div>
+                                <div id="confidenceScore" class="confidence-score">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; 2025 AI Emotion Detection PWA</p>
+            </div>
+        </footer>
+
+        <!-- Install Toast -->
+        <div id="installToast" class="toast hidden">
+            <div class="toast-content">
+                <span class="toast-icon">📱</span>
+                <div class="toast-text">
+                    <strong>Install App</strong>
+                    <p>Get the best experience!</p>
+                </div>
+            </div>
+            <div class="toast-actions">
+                <button id="installToastBtn" class="btn btn-sm">Install</button>
+                <button id="dismissToastBtn" class="btn btn-sm btn-secondary">Later</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
