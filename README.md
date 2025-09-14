@@ -1,5 +1,3 @@
-# Emotion_Detection_in_Text
-
 # Emotion_Detection_in_Text 😃📄
 
 Emotion_Detection_in_Text is an intelligent system for detecting emotions in textual data. It leverages machine learning and natural language processing to analyze input text and identify underlying emotions, making it useful for applications in sentiment analysis, chatbot development, social media monitoring, and more.
