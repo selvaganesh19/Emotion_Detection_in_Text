@@ -33,7 +33,7 @@ This project provides a full-stack solution for emotion detection from text, com
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/Emotion_Detection_in_Text.git
+   git clone https://github.com/selvaganesh19/Emotion_Detection_in_Text.git
    cd Emotion_Detection_in_Text/backend
    ```
 
